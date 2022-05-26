@@ -1,0 +1,36 @@
+command for creating datbase COLLEGE MANAGEMENT SYSTEM
+
+create database cms;
+use cms;
+show tables;	//(it show empty set as no table were add)
+
+CREATE TABLE course
+(
+course_id varchar(10 NOT NULL,
+course_name varchar(20),
+duration int,
+PRIMARY KEY(course_id)
+);
+INSERT INTO course values('co1','dac',6);
+INSERT INTO course values('co2','dbda',6);
+select * from course;			//for showing the content of course table
+CREATE TABLE student
+(
+Studentid	int(50) NOT NULL,
+SFName	varchar(20)NOT NULL,
+SLName	varchar(20)NOT NULL,
+contact no	int(10),
+age	int(100),	
+DOB	date,
+gender enum('m','f'),	
+Address	varchar(150),
+PRIMARY KEY(Studentid),
+foreign key(course_id) references course(course_id)	
+);
+INSERT INTO student values(001,'lokesh','bhaskar','9898564323',24,'1997-08-24','m','abc');	//for inserting the values
+INSERT INTO student values(002,'mohan','verma','9898534563',24,'1997-08-24','m','xyz');
+ALTER TABLE student modify column studentid varchar(10);	//for change the one datatype at a time
+DESC student;	//for show the table info (DESCRIBE)
+ALTER TABLE student modifycolumn contactno varchar(10);
+
+

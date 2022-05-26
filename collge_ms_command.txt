@@ -1,0 +1,1398 @@
+command for creating database COLLEGE MANAGEMENT SYSTEM
+
+create database cms;
+use cms;
+show tables;	//(it show empty set as no table were add)
+
+CREATE TABLE course
+(
+course_id varchar(10 NOT NULL,
+course_name varchar(20),
+duration int,
+PRIMARY KEY(course_id)
+);
+INSERT INTO course values('co1','dac',6);
+INSERT INTO course values('co2','dbda',6);
+//ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`cms`.`student`, CONSTRAINT `student_ibfk_1` FOREIGN KEY (`course_id`) REFERENCES `course` (`course_id`))
+mysql> SET FOREIGN_KEY_CHECKS=0;		//Used for disable the fk checks and delete the containt
+mysql> DELETE FROM course WHERE course_id='c01';
+mysql> DELETE FROM course WHERE course_id='c02';
+mysql> SET FOREIGN_KEY_CHECKS=1;		//activate the fk
+	
+ insert into course values ('c001','arts','12');
+insert into course values ('c002','science','12');
+mysql> insert into course values ('c003','commerce','12');
+mysql> select * from course;
++-----------+-------------+----------+
+| course_id | course_name | duration |
++-----------+-------------+----------+
+| c001      | arts        |       12 |
+| c002      | science     |       12 |
+| c003      | commerce    |       12 |
++-----------+-------------+----------+
+		
+CREATE TABLE student
+(
+Studentid	int(50) NOT NULL,
+SFName	varchar(20)NOT NULL,
+SLName	varchar(20)NOT NULL,
+contact no	int(10),
+age	int(100),	
+DOB	date,
+gender enum('m','f'),	
+Address	varchar(150),
+PRIMARY KEY(Studentid),
+foreign key(course_id) references course(course_id)	
+);
+INSERT INTO student values(001,'lokesh','bhaskar','9898564323',24,'1997-08-24','m','abc');	//for inserting the values
+INSERT INTO student values(002,'mohan','verma','9898534563',24,'1997-08-24','m','xyz');
+ALTER TABLE student modify column studentid varchar(10);	//for change the one datatype at a time
+DESC student;	//for show the table info (DESCRIBE)
+ALTER TABLE student modify column contactno varchar(10);
+
+INSERT INTO student values('s001','mohan','rao','9987342145','24','1997-05-25','m','gandhi chowk chandrapur','c002');
+INSERT INTO student values('s002','ravi','kumar','9987789654','24','1997-06-15','m','ganpati square chandrapur','c001');
+mysql> INSERT INTO student values('s003','ravi','ashwin','9981239654','25','1996-06-15','m','raddison sq chandrapur','c001');
+ INSERT INTO student values('s004','sudha','srivastav','9987798754','24','1997-06-20','f','ganpati square chandrapur','c003');
+mysql> INSERT INTO student values('s005','radha','srivastav','9987798001','24','1997-01-20','f','ganpati square chandrapur','c003');
+mysql> INSERT INTO student values('s006','rishi','dhawan','9911798001','26','1995-01-20','m','jatpura gate chandrapur','c001');
+INSERT INTO student values('s011','lalit','yadav','9984449654','24','1997-10-12','m','ganpati square chandrapur','c001');
+mysql> INSERT INTO student values('s016','kavya','patil','9984441154','23','1998-10-12','f','near ctps chandrapur','c002');
+INSERT INTO student values('s008','kuldeep,'chahal','9987798701','24','1997-11-28','m','anchleshwar gate chandrapur','c002');
+INSERT INTO student values('s008','sakshi','ghate','9987123701','24','1997-03-28','f','vidya nagar chandrapur','c002');
+INSERT INTO student values('s009','shilpa','sontake','9987623701','24','1997-07-08','f','vidya nagar chandrapur','c001');
+ INSERT INTO student values('s025','sunil','sao','9999623701','24','1997-07-19','m','old square chandrapur','c003');
+
+mysql> select * from student;
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+-----------+
+| studentid | sfname | slname    | contactno  | age  | dob        | gender | address                   | course_id |
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+-----------+
+| s001      | mohan  | rao       | 9987342145 |   24 | 1997-05-25 | m      | gandhi chowk chandrapur   | c002      |
+| s002      | ravi   | kumar     | 9987789654 |   24 | 1997-06-15 | m      | ganpati square chandrapur | c001      |
+| s003      | ravi   | ashwin    | 9981239654 |   25 | 1996-06-15 | m      | raddison sq chandrapur    | c001      |
+| s004      | sudha  | srivastav | 9987798754 |   24 | 1997-06-20 | f      | ganpati square chandrapur | c003      |
+| s005      | radha  | srivastav | 9987798001 |   24 | 1997-01-20 | f      | ganpati square chandrapur | c003      |
+| s006      | rishi  | dhawan    | 9911798001 |   26 | 1995-01-20 | m      | jatpura gate chandrapur   | c001      |
+| s008      | sakshi | ghate     | 9987123701 |   24 | 1997-03-28 | f      | vidya nagar chandrapur    | c002      |
+| s009      | shilpa | sontake   | 9987623701 |   24 | 1997-07-08 | f      | vidya nagar chandrapur    | c001      |
+| s011      | lalit  | yadav     | 9984449654 |   24 | 1997-10-12 | m      | ganpati square chandrapur | c001      |
+| s016      | kavya  | patil     | 9984441154 |   23 | 1998-10-12 | f      | near ctps chandrapur      | c002      |
+| s025      | sunil  | sao       | 9999623701 |   24 | 1997-07-19 | m      | old square chandrapur     | c003      |
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+-----------+
+
+
+CREATE TABLE subject
+(
+ subject_id varchar(20),
+ subject_name varchar(50),
+ PRIMARY KEY(subject_id)
+);
+mysql> INSERT INTO subject values('sub001','it');
+mysql> INSERT INTO subject values('sub002','science');
+mysql> INSERT INTO subject values('sub003','maths');
+mysql> INSERT INTO subject values('sub004','economics');
+mysql> INSERT INTO subject values('sub005','physics');
+mysql> INSERT INTO subject values('sub006','biology');
+INSERT INTO subject values('sub007','english');
+mysql> INSERT INTO subject values('sub008','marathi');
+mysql> INSERT INTO subject values('sub009','sociology');
+mysql> INSERT INTO subject values('sub010','home science');
+ INSERT INTO subject values('sub011','accountancy');
+ INSERT INTO subject values('sub012','org of commerse');
+ INSERT INTO subject values('sub013','computer science');
+INSERT INTO subject values('sub014','geography');
+
+
+mysql> select * from subject;
++-------------+------------------+
+| subjectCode | subjectName      |
++-------------+------------------+
+| sub001      | it               |
+| sub002      | science          |
+| sub003      | maths            |
+| sub004      | economics        |
+| sub005      | physics          |
+| sub006      | biology          |
+| sub007      | english          |
+| sub008      | marathi          |
+| sub009      | sociology        |
+| sub010      | home science     |
+| sub011      | accountancy      |
+| sub012      | org of commerse  |
+| sub013      | computer science |
+| sub014      | geography        |
++-------------+------------------+
+ 
+////
+Drop -  deletes full table
+delete  - - removes rows
+
+Update ------ rows can be updated;
+//////
+CREATE TABLE EXAM
+( 
+  examcode int(10) not null,
+  room no varchar(10),
+  time time() not null,
+  totalstudentattend int(400),
+  subjectCode varchar(20),
+  primary key(examcode),
+foreign key(subject_id) references subject(subject_id)
+);
+insert into exam values('ex101','123','9:30:00','120','sub003');
+mysql> insert into exam values('ex102','14','9:30:00','80','sub005');
+insert into exam values('ex103','10','12:00:00','60','sub001');
+mysql> select * from exam;
++----------+--------+----------+-----------------------+-------------+
+| examCode | roomNo | time     | totalStudentAttending | subjectCode |
++----------+--------+----------+-----------------------+-------------+
+| ex101    | 123    | 09:30:00 |                   120 | sub003      |
+| ex102    | 14     | 09:30:00 |                    80 | sub005      |
+| ex103    | 10     | 12:00:00 |                    60 | sub001      |
++----------+--------+----------+-----------------------+-------------+
+
+CREATE TABLE faculty
+    -> (
+    -> facultyId varchar(10) NOT NULL,
+    -> deptName varchar(20),
+    -> salary int(20),
+    -> facultyFName varchar(20),
+    -> facultyLName varchar(20),
+    -> address varchar(100),
+    -> mobileNO1 varchar(10),
+    -> mobileNO2 varchar(10),
+    -> PRIMARY KEY(facultyId)
+    -> );
+INSERT INTO faculty values ('f001','it','35000','ramesh','choudhary','jatpura road chandrapur','9908679765','9812786593');
+INSERT INTO faculty values ('f002','science','50000','suresh','deshmukh','old gate chandrapur','9995786510','9812781234');
+INSERT INTO faculty values ('f003','lab','25000','rakesh','shende','gandhi chowk chandrapur','9908679765','null');
+INSERT INTO faculty values ('f004','maths','50000','zakir','khan','ramnagar square chandrapur','9901289865','9989819854');
+INSERT INTO faculty values ('f005','economics','40000','priya','sharma','shivaji square chandrapur','9904488265','null');
+INSERT INTO faculty values ('f006','physics','45000','reshma','yadav','shantinagar statue chandrapur','9998127665','null');
+INSERT INTO faculty values ('f007','lab','45000','shweta','saini','chnada club road chandrapur','9900127665','null');
+mysql> INSERT INTO faculty values ('f008','biology','38000','aahana','khurana','pathanpura gate near cricket club chandrapur','9901033988','9878324998');
+mysql> INSERT INTO faculty values ('f009','biology','48000','aakash','basu','near vijay malya bank chandrapur','9911033988','null');
+mysql> INSERT INTO faculty values ('f010','maths','60000','anurag','mishra','near old square chandrapur','9911778018','981287659');
+ INSERT INTO faculty values ('f011','home science','60000','anurag','basu','near shivaji nagarchandrapur','9911778111','9812871110');
+mysql> INSERT INTO faculty values ('f012','accountancy','40000','sudha','sen','near chanda fort chandrapur','9911778998','9898771110');
+
+mysql> ALTER TABLE FACULTY MODIFY GENDER VARCHAR(20);
+mysql> ALTER TABLE FACULTY CHANGE GENDER EMAIL_ID VARCHAR(20);
+
+
+mysql> UPDATE FACULTY SET GENDER='MALE' WHERE FACULTYID='F001';
+mysql> UPDATE FACULTY SET GENDER='MALE' WHERE FACULTYID='F002';
+mysql> UPDATE FACULTY SET GENDER='MALE' WHERE FACULTYID='F003';
+mysql> UPDATE FACULTY SET GENDER='MALE' WHERE FACULTYID='F004';
+mysql> UPDATE FACULTY SET GENDER='FEMALE' WHERE FACULTYID='F005';
+mysql> UPDATE FACULTY SET GENDER='FEMALE' WHERE FACULTYID='F006';
+mysql> UPDATE FACULTY SET GENDER='FEMALE' WHERE FACULTYID='F007';
+mysql> UPDATE FACULTY SET GENDER='FEMALE' WHERE FACULTYID='F008';
+mysql> UPDATE FACULTY SET GENDER='MALE' WHERE FACULTYID='F009';
+mysql> UPDATE FACULTY SET GENDER='MALE' WHERE FACULTYID='F010';
+mysql> UPDATE FACULTY SET GENDER='MALE' WHERE FACULTYID='F011';
+mysql> UPDATE FACULTY SET GENDER='FEMALE' WHERE FACULTYID='F012';
+
+mysql> select * from FACULTY;
++-----------+--------------+--------+--------------+--------------+----------------------------------------------+--------+------------+------------+----------+
+| facultyId | deptName     | salary | facultyFName | facultyLName | address                                      | GENDER | mobileNO1  | mobileNO2  | EMAIL_ID |
++-----------+--------------+--------+--------------+--------------+----------------------------------------------+--------+------------+------------+----------+
+| f001      | it           |  35000 | ramesh       | choudhary    | jatpura road chandrapur                      | MALE   | 9908679765 | 9812786593 | NULL     |
+| f002      | science      |  50000 | suresh       | deshmukh     | old gate chandrapur                          | MALE   | 9995786510 | 9812781234 | NULL     |
+| f003      | lab          |  25000 | rakesh       | shende       | gandhi chowk chandrapur                      | MALE   | 9908679765 | null       | NULL     |
+| f004      | maths        |  50000 | zakir        | khan         | ramnagar square chandrapur                   | MALE   | 9901289865 | 9989819854 | NULL     |
+| f005      | economics    |  40000 | priya        | sharma       | shivaji square chandrapur                    | FEMALE | 9904488265 | null       | NULL     |
+| f006      | physics      |  45000 | reshma       | yadav        | shantinagar statue chandrapur                | FEMALE | 9998127665 | null       | NULL     |
+| f007      | lab          |  45000 | shweta       | saini        | chnada club road chandrapur                  | FEMALE | 9900127665 | null       | NULL     |
+| f008      | biology      |  38000 | aahana       | khurana      | pathanpura gate near cricket club chandrapur | FEMALE | 9901033988 | 9878324998 | NULL     |
+| f009      | biology      |  48000 | aakash       | basu         | near vijay malya bank chandrapur             | MALE   | 9911033988 | null       | NULL     |
+| f010      | maths        |  60000 | anurag       | mishra       | near old square chandrapur                   | MALE   | 9911778018 | 981287659  | NULL     |
+| f011      | home science |  60000 | anurag       | basu         | near shivaji nagarchandrapur                 | MALE   | 9911778111 | 9812871110 | NULL     |
+| f012      | accountancy  |  40000 | sudha        | sen          | near chanda fort chandrapur                  | FEMALE | 9911778998 | 9898771110 | NULL     |
++-----------+--------------+--------+--------------+--------------+----------------------------------------------+--------+------------+------------+----------+
+
+
+
+CREATE TABLE department
+    -> (
+    ->  departmentId varchar(10),
+    -> department_name varchar(30),
+    -> hod_fname varchar(20),
+    -> hod_lname varchar(20),
+    -> PRIMARY KEY(departmentId)
+    -> );
+Query OK, 0 rows affected (0.03 sec)
+
+mysql> desc department;
++-----------------+-------------+------+-----+---------+-------+
+| Field           | Type        | Null | Key | Default | Extra |
++-----------------+-------------+------+-----+---------+-------+
+| departmentId    | varchar(10) | NO   | PRI | NULL    |       |
+| department_name | varchar(30) | YES  |     | NULL    |       |
+| hod_fname       | varchar(20) | YES  |     | NULL    |       |
+| hod_lname       | varchar(20) | YES  |     | NULL    |       |
++-----------------+-------------+------+-----+---------+-------+
+
+
+INSERT INTO department values ('d001','maths','pravin',' potdukhe');
+mysql> INSERT INTO department values ('d002','it','shiva',' sridhan');
+mysql> INSERT INTO department values ('d011','science','savita',' thakur');
+mysql> INSERT INTO department values ('d101','lab','sunny','iyer');
+mysql> INSERT INTO department values ('d034','economics','sudhir','pande');
+mysql> INSERT INTO department values ('d021','physics','harshwardhan','deshmukh');
+mysql> INSERT INTO department values ('d014','biology','vijay','kumar');
+mysql> select * from department;
++--------------+-----------------+--------------+-----------+
+| departmentId | department_name | hod_fname    | hod_lname |
++--------------+-----------------+--------------+-----------+
+| d001         | maths           | pravin       |  potdukhe |
+| d002         | it              | shiva        |  sridhan  |
+| d011         | science         | savita       |  thakur   |
+| d014         | biology         | vijay        | kumar     |
+| d021         | physics         | harshwardhan | deshmukh  |
+| d034         | economics       | sudhir       | pande     |
+| d101         | lab             | sunny        | iyer      |
++--------------+-----------------+--------------+-----------+
+
+CREATE TABLE hostel
+    -> (
+    -> hostel_id varchar(10),
+    -> hostel_type enum('boys','girls'),
+    -> hostel_name enum('st.albert','kamal'),
+    -> number_of_seats int(150),
+    -> studentId varchar(10),
+    -> PRIMARY KEY(hostel_id),
+    -> FOREIGN KEY(studentId) REFERENCES student(studentId)
+    -> );
+ INSERT INTO hostel values('h001','boys','st.albert','100','s002');
+ INSERT INTO hostel values('h003','girls','kamal','100','s004');
+INSERT INTO hostel values('h005','boys','st.albert','100','s025');
+mysql> INSERT INTO hostel values('h007','boys','st.albert','100','s011');
+mysql> INSERT INTO hostel values('h0011','girls','kamal','100','s016');
+mysql> INSERT INTO hostel values('h0015','boys','st.albert','100','s001');
+
+mysql> select * from hostel;
++-----------+-------------+-------------+-----------------+-----------+
+| hostel_id | hostel_type | hostel_name | number_of_seats | studentId |
++-----------+-------------+-------------+-----------------+-----------+
+| h001      | boys        | st.albert   |             100 | s002      |
+| h0011     | girls       | kamal       |             100 | s016      |
+| h0015     | boys        | st.albert   |             100 | s001      |
+| h003      | girls       | kamal       |             100 | s004      |
+| h005      | boys        | st.albert   |             100 | s025      |
+| h007      | boys        | st.albert   |             100 | s011      |
++-----------+-------------+-------------+-----------------+-----------+
+
+//USE OF SOME COMMANDS-date 16/05/22
+
+mysql> select * from information_schema.table_constraints where table_schema=schema() and table_name='student';
++--------------------+-------------------+-----------------+--------------+------------+-----------------+----------+
+| CONSTRAINT_CATALOG | CONSTRAINT_SCHEMA | CONSTRAINT_NAME | TABLE_SCHEMA | TABLE_NAME | CONSTRAINT_TYPE | ENFORCED |
++--------------------+-------------------+-----------------+--------------+------------+-----------------+----------+
+| def                | cms               | PRIMARY         | cms          | student    | PRIMARY KEY     | YES      |
+| def                | cms               | student_ibfk_1  | cms          | student    | FOREIGN KEY     | YES      |
++--------------------+-------------------+-----------------+--------------+------------+-----------------+----------+
+
+mysql> ALTER table student add COLUMN email_id varchar(30) after address;
+mysql> SELECT * FROM STUDENT;
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+----------+-----------+
+| studentid | sfname | slname    | contactno  | age  | dob        | gender | address                   | email_id | course_id |
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+----------+-----------+
+| s001      | mohan  | rao       | 9987342145 |   24 | 1997-05-25 | m      | gandhi chowk chandrapur   | NULL     | c002      |
+| s002      | ravi   | kumar     | 9987789654 |   24 | 1997-06-15 | m      | ganpati square chandrapur | NULL     | c001      |
+| s003      | ravi   | ashwin    | 9981239654 |   25 | 1996-06-15 | m      | raddison sq chandrapur    | NULL     | c001      |
+| s004      | sudha  | srivastav | 9987798754 |   24 | 1997-06-20 | f      | ganpati square chandrapur | NULL     | c003      |
+| s005      | radha  | srivastav | 9987798001 |   24 | 1997-01-20 | f      | ganpati square chandrapur | NULL     | c003      |
+| s006      | rishi  | dhawan    | 9911798001 |   26 | 1995-01-20 | m      | jatpura gate chandrapur   | NULL     | c001      |
+| s008      | sakshi | ghate     | 9987123701 |   24 | 1997-03-28 | f      | vidya nagar chandrapur    | NULL     | c002      |
+| s009      | shilpa | sontake   | 9987623701 |   24 | 1997-07-08 | f      | vidya nagar chandrapur    | NULL     | c001      |
+| s011      | lalit  | yadav     | 9984449654 |   24 | 1997-10-12 | m      | ganpati square chandrapur | NULL     | c001      |
+| s016      | kavya  | patil     | 9984441154 |   23 | 1998-10-12 | f      | near ctps chandrapur      | NULL     | c002      |
+| s025      | sunil  | sao       | 9999623701 |   24 | 1997-07-19 | m      | old square chandrapur     | NULL     | c003      |
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+----------+-----------+
+11 rows in set (0.00 sec)
+
+mysql> update student set email_id='maoahanrao@gamil.com' WHERE studentid='s001';
+mysql> update student set email_id='sudha@gamil.com' WHERE studentid='s004';
+mysql> update student set email_id='dhawan_@gamil.com' WHERE studentid='s006';
+
+mysql> ALTER TABLE student rename to students;
+mysql> ALTER TABLE students CHANGE contactno contact_no varchar(10);
+mysql> SELECT DEPTNAME ,FACULTYFNAME,MOBILENO1 FROM FACULTY;
++--------------+--------------+------------+
+| DEPTNAME     | FACULTYFNAME | MOBILENO1  |
++--------------+--------------+------------+
+| it           | ramesh       | 9908679765 |
+| science      | suresh       | 9995786510 |
+| lab          | rakesh       | 9908679765 |
+| maths        | zakir        | 9901289865 |
+| economics    | priya        | 9904488265 |
+| physics      | reshma       | 9998127665 |
+| lab          | shweta       | 9900127665 |
+| biology      | aahana       | 9901033988 |
+| biology      | aakash       | 9911033988 |
+| maths        | anurag       | 9911778018 |
+| home science | anurag       | 9911778111 |
+| accountancy  | sudha        | 9911778998 |
++--------------+--------------+------------+
+mysql> SELECT FACULTYID AS ID,SALARY AS 'MONTHLY SALARY',ADDRESS AS'LOCAL ADDRESS' FROM FACULTY;
++------+----------------+----------------------------------------------+
+| ID   | MONTHLY SALARY | LOCAL ADDRESS                                |
++------+----------------+----------------------------------------------+
+| f001 |          35000 | jatpura road chandrapur                      |
+| f002 |          50000 | old gate chandrapur                          |
+| f003 |          25000 | gandhi chowk chandrapur                      |
+| f004 |          50000 | ramnagar square chandrapur                   |
+| f005 |          40000 | shivaji square chandrapur                    |
+| f006 |          45000 | shantinagar statue chandrapur                |
+| f007 |          45000 | chnada club road chandrapur                  |
+| f008 |          38000 | pathanpura gate near cricket club chandrapur |
+| f009 |          48000 | near vijay malya bank chandrapur             |
+| f010 |          60000 | near old square chandrapur                   |
+| f011 |          60000 | near shivaji nagarchandrapur                 |
+| f012 |          40000 | near chanda fort chandrapur                  |
++------+----------------+----------------------------------------------+
+mysql> SELECT * FROM FACULTY WHERE DEPTNAME ='BIOLOGY';
++-----------+----------+--------+--------------+--------------+----------------------------------------------+------------+------------+
+| facultyId | deptName | salary | facultyFName | facultyLName | address                                      | mobileNO1  | mobileNO2  |
++-----------+----------+--------+--------------+--------------+----------------------------------------------+------------+------------+
+| f008      | biology  |  38000 | aahana       | khurana      | pathanpura gate near cricket club chandrapur | 9901033988 | 9878324998 |
+| f009      | biology  |  48000 | aakash       | basu         | near vijay malya bank chandrapur             | 9911033988 | null       |
++-----------+----------+--------+--------------+--------------+----------------------------------------------+------------+------------+
+
+mysql> SELECT DISTINCT(ADDRESS) FROM FACULTY;
++----------------------------------------------+
+| ADDRESS                                      |
++----------------------------------------------+
+| jatpura road chandrapur                      |
+| old gate chandrapur                          |
+| gandhi chowk chandrapur                      |
+| ramnagar square chandrapur                   |
+| shivaji square chandrapur                    |
+| shantinagar statue chandrapur                |
+| chnada club road chandrapur                  |
+| pathanpura gate near cricket club chandrapur |
+| near vijay malya bank chandrapur             |
+| near old square chandrapur                   |
+| near shivaji nagarchandrapur                 |
+| near chanda fort chandrapur                  |
++----------------------------------------------+
+
+mysql> select ADDRESS , count(ADDRESS) from FACULTY group by ADDRESS;
++----------------------------------------------+----------------+
+| ADDRESS                                      | count(ADDRESS) |
++----------------------------------------------+----------------+
+| jatpura road chandrapur                      |              1 |
+| old gate chandrapur                          |              1 |
+| gandhi chowk chandrapur                      |              1 |
+| ramnagar square chandrapur                   |              1 |
+| shivaji square chandrapur                    |              1 |
+| shantinagar statue chandrapur                |              1 |
+| chnada club road chandrapur                  |              1 |
+| pathanpura gate near cricket club chandrapur |              1 |
+| near vijay malya bank chandrapur             |              1 |
+| near old square chandrapur                   |              1 |
+| near shivaji nagarchandrapur                 |              1 |
+| near chanda fort chandrapur                  |              1 |
++----------------------------------------------+----------------+
+
+mysql> select * from STUDENTS where SFNAME LIKE '%HA%';
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+----------------------+-----------+
+| studentid | sfname | slname    | contact_no | age  | dob        | gender | address                   | email_id             | course_id |
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+----------------------+-----------+
+| s001      | mohan  | rao       | 9987342145 |   24 | 1997-05-25 | m      | gandhi chowk chandrapur   | maoahanrao@gamil.com | c002      |
+| s004      | sudha  | srivastav | 9987798754 |   24 | 1997-06-20 | f      | ganpati square chandrapur | sudha@gamil.com      | c003      |
+| s005      | radha  | srivastav | 9987798001 |   24 | 1997-01-20 | f      | ganpati square chandrapur | NULL                 | c003      |
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+----------------------+-----------+
+
+.......................................................................
+.......................................................................
+date-17/05/2022
+join
+
+
+mysql> SELECT SUBJECTNAME,EXAMCODE FROM SUBJECT E LEFT JOIN EXAM S ON E.SUBJECTCODE=S.SUBJECTCODE;// first subject then exam
++------------------+----------+
+| SUBJECTNAME      | EXAMCODE |
++------------------+----------+
+| it               | ex103    |
+| science          | NULL     |
+| maths            | ex101    |
+| economics        | NULL     |
+| physics          | ex102    |
+| biology          | NULL     |
+| english          | NULL     |
+| marathi          | NULL     |
+| sociology        | NULL     |
+| home science     | NULL     |
+| accountancy      | NULL     |
+| org of commerse  | NULL     |
+| computer science | NULL     |
+| geography        | NULL     |
++------------------+----------+
+mysql> SELECT EXAMCODE,ROOMNO,SUBJECTNAME FROM EXAM E INNER JOIN SUBJECT S ON E.SUBJECTCODE=S.SUBJECTCODE;
++----------+--------+-------------+
+| EXAMCODE | ROOMNO | SUBJECTNAME |
++----------+--------+-------------+
+| ex101    | 123    | maths       |
+| ex102    | 14     | physics     |
+| ex103    | 10     | it          |
++----------+--------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT EXAMCODE,ROOMNO,SUBJECTNAME FROM EXAM E RIGHT JOIN SUBJECT S ON E.SUBJECTCODE=S.SUBJECTCODE;
++----------+--------+------------------+
+| EXAMCODE | ROOMNO | SUBJECTNAME      |
++----------+--------+------------------+
+| ex103    | 10     | it               |
+| NULL     | NULL   | science          |
+| ex101    | 123    | maths            |
+| NULL     | NULL   | economics        |
+| ex102    | 14     | physics          |
+| NULL     | NULL   | biology          |
+| NULL     | NULL   | english          |
+| NULL     | NULL   | marathi          |
+| NULL     | NULL   | sociology        |
+| NULL     | NULL   | home science     |
+| NULL     | NULL   | accountancy      |
+| NULL     | NULL   | org of commerse  |
+| NULL     | NULL   | computer science |
+| NULL     | NULL   | geography        |
++----------+--------+------------------+
+
+mysql> SELECT SFNAME,SLNAME FROM STUDENTS WHERE COURSE_ID=(SELECT COURSE_ID FROM COURSE WHERE COURSE_NAME='SCIENCE');
++--------+--------+
+| SFNAME | SLNAME |
++--------+--------+
+| mohan  | rao    |
+| sakshi | ghate  |
+| kavya  | patil  |
++--------+--------+
+
+mysql> SELECT SFNAME,SLNAME FROM STUDENTS WHERE COURSE_ID NOT IN (SELECT COURSE_ID FROM COURSE WHERE COURSE_NAME='SCIENCE');
++--------+-----------+
+| SFNAME | SLNAME    |
++--------+-----------+
+| ravi   | kumar     |
+| ravi   | ashwin    |
+| sudha  | srivastav |
+| radha  | srivastav |
+| rishi  | dhawan    |
+| shilpa | sontake   |
+| lalit  | yadav     |
+| sunil  | sao       |
++--------+-----------+
+
+mysql> SELECT ADDRESS FROM FACULTY UNION ALL SELECT ADDRESS FROM STUDENTS;
++----------------------------------------------+
+| ADDRESS                                      |
++----------------------------------------------+
+| jatpura road chandrapur                      |
+| old gate chandrapur                          |
+| gandhi chowk chandrapur                      |
+| ramnagar square chandrapur                   |
+| shivaji square chandrapur                    |
+| shantinagar statue chandrapur                |
+| chnada club road chandrapur                  |
+| pathanpura gate near cricket club chandrapur |
+| near vijay malya bank chandrapur             |
+| near old square chandrapur                   |
+| near shivaji nagarchandrapur                 |
+| near chanda fort chandrapur                  |
+| gandhi chowk chandrapur                      |
+| ganpati square chandrapur                    |
+| raddison sq chandrapur                       |
+| ganpati square chandrapur                    |
+| ganpati square chandrapur                    |
+| jatpura gate chandrapur                      |
+| vidya nagar chandrapur                       |
+| vidya nagar chandrapur                       |
+| ganpati square chandrapur                    |
+| near ctps chandrapur                         |
+| old square chandrapur                        |
++----------------------------------------------+
+
+mysql> create table abcd(id int(10) auto_increment,name varchar(10),
+    -> primary key(id)
+    -> );
+Query OK, 0 rows affected, 1 warning (0.04 sec)
+
+mysql> desc abcd;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| id    | int         | NO   | PRI | NULL    | auto_increment |
+| name  | varchar(10) | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+mysql> insert into abcd(name) values ('ram');
+
+mysql> select * from abcd;
++----+------+
+| id | name |
++----+------+
+|  1 | ram  |
++----+------+
+mysql> ALTER TABLE ABCD AUTO_INCREMENT=100;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> insert into abcd(name) values ('SHam');
+Query OK, 1 row affected (0.01 sec)
+
+mysql> select * from abcd;
++-----+------+
+| id  | name |
++-----+------+
+|   1 | ram  |
+| 100 | SHam |
++-----+------+
+*To Create new user*
+mysql> create user xyz@localhost IDENTIFIED BY 'password';
+*To list all the users*
+mysql> select user from mysql.user;
++------------------+
+| user             |
++------------------+
+| mysql.infoschema |
+| mysql.session    |
+| mysql.sys        |
+| root             |
+| xyz              |
++------------------+
+mysql> select user from mysql.db where db='subject';
+mysql> DROP USER xyz@localhost;
+
+.............................................
+DATE-18/05/22
+
+mysql> CREATE VIEW N0_OF_STD AS SELECT SFNAME,AGE,COURSE_ID,GENDER FROM STUDENTS WHERE GENDER='M';
+mysql> select * from N0_OF_STD;
++--------+------+-----------+--------+
+| SFNAME | AGE  | COURSE_ID | GENDER |
++--------+------+-----------+--------+
+| mohan  |   24 | c002      | m      |
+| ravi   |   24 | c001      | m      |
+| ravi   |   25 | c001      | m      |
+| rishi  |   26 | c001      | m      |
+| lalit  |   24 | c001      | m      |
+| sunil  |   24 | c003      | m      |
++--------+------+-----------+--------+
+mysql> create view complexview as select studentid,sfname,slname,gender,course_name from students s JOIN course c ON s.course_id=c.course_id;
+mysql> select * from complexview;
++-----------+--------+-----------+--------+-------------+
+| studentid | sfname | slname    | gender | course_name |
++-----------+--------+-----------+--------+-------------+
+| s002      | ravi   | kumar     | m      | arts        |
+| s003      | ravi   | ashwin    | m      | arts        |
+| s006      | rishi  | dhawan    | m      | arts        |
+| s009      | shilpa | sontake   | f      | arts        |
+| s011      | lalit  | yadav     | m      | arts        |
+| s001      | mohan  | rao       | m      | science     |
+| s008      | sakshi | ghate     | f      | science     |
+| s016      | kavya  | patil     | f      | science     |
+| s004      | sudha  | srivastav | f      | commerce    |
+| s005      | radha  | srivastav | f      | commerce    |
+| s025      | sunil  | sao       | m      | commerce    |
++-----------+--------+-----------+--------+-------------+
+
+mysql> show full tables;
++---------------+------------+
+| Tables_in_cms | Table_type |
++---------------+------------+
+| abcd          | BASE TABLE |
+| complexview   | VIEW       |
+| course        | BASE TABLE |
+| department    | BASE TABLE |
+| exam          | BASE TABLE |
+| faculty       | BASE TABLE |
+| hostel        | BASE TABLE |
+| n0_of_std     | VIEW       |
+| students      | BASE TABLE |
+| subject       | BASE TABLE |
++---------------+------------+
+
+mysql> CREATE TEMPORARY TABLE TEMP_STD as select SFNAME,SLNAME, ADDRESS,AGE FROM STUDENTS;
+mysql> SELECT * FROM TEMP_STD;
++--------+-----------+---------------------------+------+
+| SFNAME | SLNAME    | ADDRESS                   | AGE  |
++--------+-----------+---------------------------+------+
+| mohan  | rao       | gandhi chowk chandrapur   |   24 |
+| ravi   | kumar     | ganpati square chandrapur |   24 |
+| ravi   | ashwin    | raddison sq chandrapur    |   25 |
+| sudha  | srivastav | ganpati square chandrapur |   24 |
+| radha  | srivastav | ganpati square chandrapur |   24 |
+| rishi  | dhawan    | jatpura gate chandrapur   |   26 |
+| sakshi | ghate     | vidya nagar chandrapur    |   24 |
+| shilpa | sontake   | vidya nagar chandrapur    |   24 |
+| lalit  | yadav     | ganpati square chandrapur |   24 |
+| kavya  | patil     | near ctps chandrapur      |   23 |
+| sunil  | sao       | old square chandrapur     |   24 |
++--------+-----------+---------------------------+------+
+
+mysql> CREATE INDEX IND_ADDRS ON STUDENTS(ADDRESS);
+mysql> SHOW INDEXES FROM STUDENTS;
++----------+------------+-----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| Table    | Non_unique | Key_name  | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment | Visible | Expression |
++----------+------------+-----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+| students |          0 | PRIMARY   |            1 | studentid   | A         |          11 |     NULL |   NULL |      | BTREE      |         |               | YES     | NULL       |
+| students |          1 | course_id |            1 | course_id   | A         |           3 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
+| students |          1 | IND_ADDRS |            1 | address     | A         |           7 |     NULL |   NULL | YES  | BTREE      |         |               | YES     | NULL       |
++----------+------------+-----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+---------+------------+
+
+mysql> ALTER TABLE STUDENTS ALTER INDEX IND_ADDRS INVISIBLE;
+mysql> DROP INDEX IND_ADDRS ON STUDENTS;
+
+.......................................................................................................
+
+date-20/05/2022
+
+mysql> select current_date();
++----------------+
+| current_date() |
++----------------+
+| 2022-05-20     |
++----------------+
+
+mysql> select user();
++----------------+
+| user()         |
++----------------+
+| root@localhost |
++----------------+
+
+mysql> select truncate(723.1743,1);
++----------------------+
+| truncate(723.1743,1) |
++----------------------+
+|                723.1 |
++----------------------+
+1 row in set (0.01 sec)
+
+mysql> select truncate(723.1743,2);
++----------------------+
+| truncate(723.1743,2) |
++----------------------+
+|               723.17 |
++----------------------+
+1 row in set (0.00 sec)
+
+mysql> select truncate(723.2876,2);
++----------------------+
+| truncate(723.2876,2) |
++----------------------+
+|               723.28 |
++----------------------+
+
+mysql> select ucase('captain america');
++--------------------------+
+| ucase('captain america') |
++--------------------------+
+| CAPTAIN AMERICA          |
++--------------------------+
+mysql> select routine_name,routine_type from information_schema.routines where routine_type='function' and routine_schema='cms';
+Empty set (0.01 sec)
+mysql> set GLOBAL log_bin_trust_function_creators=1;
+Query OK, 0 rows affected (0.01 sec)
+
+ delimiter /
+ create function sfname(countsfname varchar(20))
+     returns int
+     Begin
+     return(select count(studentid) from students where sfname=countsfname);
+     end /
+Query OK, 0 rows affected (0.02 sec)
+mysql> delimiter ;
+mysql> select sfname('mohan');
++-----------------+
+| sfname('mohan') |
++-----------------+
+|               1 |
++-----------------+
+mysql> select sfname('ravi');
++----------------+
+| sfname('ravi') |
++----------------+
+|              2 |
++----------------+
+
+mysql> delimiter /
+mysql> create function deptnamewisecount(dept varchar(20))
+    -> return int
+    -> begin
+    -> return(select count(facultyid) from faculty where deptname=dept);
+    -> end /
+mysql> delimiter;
+    -> select deptnamewisecount('biology');
+
+
+mysql> delimiter /
+mysql> create function deptnameWisefaculty(adeptname varchar(20))
+    -> returns int
+    -> begin
+    -> return (select count(*) from faculty where deptname=adeptname);
+    -> end /
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> delimiter ;
+mysql> select 'number of faculty from biology are',deptnameWisefaculty('biology');
++------------------------------------+--------------------------------+
+| number of faculty from biology are | deptnameWisefaculty('biology') |
++------------------------------------+--------------------------------+
+| number of faculty from biology are |                              2 |
++------------------------------------+--------------------------------+
+
+
+
+delimiter /
+CREATE FUNCTION checkseats(nos int(10)) returns varchar(100)
+BEGIN
+DECLARE status varchar(100);
+	IF(nos=120) THEN SET status='seats full';
+		ELSEIF(nos<120) THEN SET status='seats vacants';
+	END IF;
+return(status);
+end /
+delimiter ;
+mysql> select course_id,checkseats(noofseats) from course;
++-----------+-----------------------+
+| course_id | checkseats(noofseats) |
++-----------+-----------------------+
+| c001      | seats vacants         |
+| c002      | seats full            |
+| c003      | seats vacants         |
++-----------+-----------------------+
+
+delimiter /
+mysql> CREATE FUNCTION checknoofseats(nos int(10)) returns varchar(100)
+    -> BEGIN
+    -> DECLARE coursename varchar(100);
+    -> IF(nos=120) THEN SET coursename='seats for science is 120';
+    -> ELSEIF(nos=80) THEN SET coursename='seats for commerce is 80';
+    -> ELSEIF(nos<80) THEN SET coursename='seats for arts is 60';
+    -> END IF;
+    -> return(coursename);
+    -> end /
+delimiter ;
+
+mysql> select course_id ,checknoofseats(noofseats) from course;
++-----------+---------------------------+
+| course_id | checknoofseats(noofseats) |
++-----------+---------------------------+
+| c001      | seats for arts is 60      |
+| c002      | seats for science is 120  |
+| c003      | seats for commerce is 80  |
++-----------+---------------------------+
+
+...........................date-23/05/22.......................................
+.........................PROCEDURES..........................................
+Delimiter @
+CREATE PROCEDURE getContactno(IN stdid varchar(10),OUT sname varchar(30))
+BEGIN
+	Select sfname INTO sname from students where studentid = stdid;
+END @
+Delimiter ;
+
+mysql> call  getContactno('s001',@name);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @name;
++-------+
+| @name |
++-------+
+| mohan |
++-------+
+
+Delimiter /
+CREATE PROCEDURE getContact(IN stdid varchar(10),OUT contact varchar(30))
+BEGIN
+	Select contact_no INTO contact from students where studentid = stdid;
+END /
+Delimiter ;
+mysql> call getContact('s001',@cntct);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @cntct;
++------------+
+| @cntct     |
++------------+
+| 9987342145 |
++------------+
+
+
+delimiter /
+CREATE PROCEDURE  checkcourse(IN cid varchar(10), OUT coursetype varchar(60))
+BEGIN
+	declare cn varchar(50);
+	SELECT course_name from course where course_id = cid INTO cn;
+	Select course_name INTO coursetype;
+END /
+delimiter ;
+
+
+
+Delimiter //
+Create procedure checkdeptCase(IN did varchar(10), OUT depttype varchar(60))
+Begin
+
+declare yr int(10);
+Select year(doj) from department where departmentid = did INTO yr;
+CASE
+	WHEN yr = 2018 THEN SET depttype= 'currently appointed hod';	
+	WHEN yr = 2012 THEN SET depttype = 'experienced hod';
+	WHEN yr < 2012 THEN SET depttype = 'experienced hod lvl 3';	
+END CASE;
+End //
+
+Delimiter ;
+
+mysql> call checkdeptCase('d034',@dept);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @dept;
++-------------------------+
+| @dept                   |
++-------------------------+
+| currently appointed hod |
++-------------------------+
+mysql> call checkdeptCase('d002',@dept);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> select @dept;
++-----------------+
+| @dept           |
++-----------------+
+| experienced hod |
++-----------------+
+1 row in set (0.00 sec)
+
+
+...................create procedure using while loop...................
+
+mysql> SELECT ROUTINE_NAME,ROUTINE_TYPE FROM INFORMATION_SCHEMA.ROUTINES WHERE ROUTINE_TYPE='PROCEDURE' AND ROUTINE_SCHEMA='CMS';
++-----------------+--------------+
+| ROUTINE_NAME    | ROUTINE_TYPE |
++-----------------+--------------+
+| checkcourseCase | PROCEDURE    |
+| checkdeptCase   | PROCEDURE    |
+| chkwhile        | PROCEDURE    |
+| chkwhile01      | PROCEDURE    |
+| displayAlldata  | PROCEDURE    |
+| getContact      | PROCEDURE    |
+| getContactno    | PROCEDURE    |
++-----------------+--------------+
+mysql> Delimiter /
+mysql> Create procedure chkwhile()
+    -> Begin
+    -> declare a int;
+    -> declare strng varchar(200);
+    -> set a = 1;
+    -> set strng = '';
+    -> While (a <= 10) do
+    -> set strng = concat(strng , a, ',');
+    -> set a = a+1;
+    -> End While;
+    -> Select strng;
+    -> End /
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> delimiter ;
+mysql> call chkwhile();
++-----------------------+
+| strng                 |
++-----------------------+
+| 1,2,3,4,5,6,7,8,9,10, |
++-----------------------+
+
+Delimiter $
+create procedure displayAlldata()
+Begin
+declare n INT default 0;
+declare i INT default 0;
+set i = 0;
+
+	select count(*) from students INTO n;
+	
+	while (i<n) DO
+		select * from students limit i, 1;
+		set i = i+1;
+	End While;
+END $
+delimiter ;
+
+mysql> call displayAlldata();
++-----------+--------+--------+------------+------+------------+--------+-------------------------+----------------------+-----------+
+| studentid | sfname | slname | contact_no | age  | dob        | gender | address                 | email_id             | course_id |
++-----------+--------+--------+------------+------+------------+--------+-------------------------+----------------------+-----------+
+| s001      | mohan  | rao    | 9987342145 |   24 | 1997-05-25 | m      | gandhi chowk chandrapur | maoahanrao@gamil.com | c002      |
++-----------+--------+--------+------------+------+------------+--------+-------------------------+----------------------+-----------+
+1 row in set (0.03 sec)
+
++-----------+--------+--------+------------+------+------------+--------+---------------------------+----------+-----------+
+| studentid | sfname | slname | contact_no | age  | dob        | gender | address                   | email_id | course_id |
++-----------+--------+--------+------------+------+------------+--------+---------------------------+----------+-----------+
+| s002      | ravi   | kumar  | 9987789654 |   24 | 1997-06-15 | m      | ganpati square chandrapur | NULL     | c001      |
++-----------+--------+--------+------------+------+------------+--------+---------------------------+----------+-----------+
+1 row in set (0.12 sec)
+
++-----------+--------+--------+------------+------+------------+--------+------------------------+----------+-----------+
+| studentid | sfname | slname | contact_no | age  | dob        | gender | address                | email_id | course_id |
++-----------+--------+--------+------------+------+------------+--------+------------------------+----------+-----------+
+| s003      | ravi   | ashwin | 9981239654 |   25 | 1996-06-15 | m      | raddison sq chandrapur | NULL     | c001      |
++-----------+--------+--------+------------+------+------------+--------+------------------------+----------+-----------+
+1 row in set (0.21 sec)
+
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+-----------------+-----------+
+| studentid | sfname | slname    | contact_no | age  | dob        | gender | address                   | email_id        | course_id |
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+-----------------+-----------+
+| s004      | sudha  | srivastav | 9987798754 |   24 | 1997-06-20 | f      | ganpati square chandrapur | sudha@gamil.com | c003      |
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+-----------------+-----------+
+1 row in set (0.31 sec)
+
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+----------+-----------+
+| studentid | sfname | slname    | contact_no | age  | dob        | gender | address                   | email_id | course_id |
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+----------+-----------+
+| s005      | radha  | srivastav | 9987798001 |   24 | 1997-01-20 | f      | ganpati square chandrapur | NULL     | c003      |
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+----------+-----------+
+1 row in set (0.50 sec)
+
++-----------+--------+--------+------------+------+------------+--------+-------------------------+-------------------+-----------+
+| studentid | sfname | slname | contact_no | age  | dob        | gender | address                 | email_id          | course_id |
++-----------+--------+--------+------------+------+------------+--------+-------------------------+-------------------+-----------+
+| s006      | rishi  | dhawan | 9911798001 |   26 | 1995-01-20 | m      | jatpura gate chandrapur | dhawan_@gamil.com | c001      |
++-----------+--------+--------+------------+------+------------+--------+-------------------------+-------------------+-----------+
+1 row in set (0.63 sec)
+
++-----------+--------+--------+------------+------+------------+--------+------------------------+----------+-----------+
+| studentid | sfname | slname | contact_no | age  | dob        | gender | address                | email_id | course_id |
++-----------+--------+--------+------------+------+------------+--------+------------------------+----------+-----------+
+| s008      | sakshi | ghate  | 9987123701 |   24 | 1997-03-28 | f      | vidya nagar chandrapur | NULL     | c002      |
++-----------+--------+--------+------------+------+------------+--------+------------------------+----------+-----------+
+1 row in set (0.74 sec)
+
++-----------+--------+---------+------------+------+------------+--------+------------------------+----------+-----------+
+| studentid | sfname | slname  | contact_no | age  | dob        | gender | address                | email_id | course_id |
++-----------+--------+---------+------------+------+------------+--------+------------------------+----------+-----------+
+| s009      | shilpa | sontake | 9987623701 |   24 | 1997-07-08 | f      | vidya nagar chandrapur | NULL     | c001      |
++-----------+--------+---------+------------+------+------------+--------+------------------------+----------+-----------+
+1 row in set (0.83 sec)
+
++-----------+--------+--------+------------+------+------------+--------+---------------------------+----------+-----------+
+| studentid | sfname | slname | contact_no | age  | dob        | gender | address                   | email_id | course_id |
++-----------+--------+--------+------------+------+------------+--------+---------------------------+----------+-----------+
+| s011      | lalit  | yadav  | 9984449654 |   24 | 1997-10-12 | m      | ganpati square chandrapur | NULL     | c001      |
++-----------+--------+--------+------------+------+------------+--------+---------------------------+----------+-----------+
+1 row in set (0.98 sec)
+
++-----------+--------+--------+------------+------+------------+--------+----------------------+----------+-----------+
+| studentid | sfname | slname | contact_no | age  | dob        | gender | address              | email_id | course_id |
++-----------+--------+--------+------------+------+------------+--------+----------------------+----------+-----------+
+| s016      | kavya  | patil  | 9984441154 |   23 | 1998-10-12 | f      | near ctps chandrapur | NULL     | c002      |
++-----------+--------+--------+------------+------+------------+--------+----------------------+----------+-----------+
+1 row in set (1.14 sec)
+
++-----------+--------+--------+------------+------+------------+--------+-----------------------+----------+-----------+
+| studentid | sfname | slname | contact_no | age  | dob        | gender | address               | email_id | course_id |
++-----------+--------+--------+------------+------+------------+--------+-----------------------+----------+-----------+
+| s025      | sunil  | sao    | 9999623701 |   24 | 1997-07-19 | m      | old square chandrapur | NULL     | c003      |
++-----------+--------+--------+------------+------+------------+--------+-----------------------+----------+-----------+
+
+Delimiter //
+Create procedure chkRPTtable()
+BEGIN
+	declare b int(10);
+	set b = 0;
+	Repeat
+           
+		update students set email_id=concat(sfname,'@gmail.com');
+		set b = b+1;
+		until b = 10
+	End Repeat;
+End //
+
+
+
+Delimiter /
+Create procedure chkwhile01()
+Begin
+Declare a int;
+Declare strng varchar(20);
+set a = 1;  
+set strng = '';
+While (a <=5) do
+	set strng = concat(strng,a,',');
+	set a = a+1;
+End While;
+Select strng;
+End /
+mysql> delimiter ;
+mysql> call chkwhile01();
++------------+
+| strng      |
++------------+
+| 1,2,3,4,5, |
++------------+
+
+Delimiter //
+Create procedure chkRptInstdTable()
+Begin
+declare strng varchar(20);
+declare b int(10);
+set strng = '' ;
+set b = 0;
+Repeat 
+	update students set email_id = '' where email_id is NULL;
+	update students set email_id = concat(sfname, '@gmail.com');
+	set b = b+1;
+	until b = 6
+End repeat;
+End //
+Delimiter ;
+
+mysql> call chkRptInstdTable;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> select * from students;
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+------------------+-----------+
+| studentid | sfname | slname    | contact_no | age  | dob        | gender | address                   | email_id         | course_id |
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+------------------+-----------+
+| s001      | mohan  | rao       | 9987342145 |   24 | 1997-05-25 | m      | gandhi chowk chandrapur   | mohan@gmail.com  | c002      |
+| s002      | ravi   | kumar     | 9987789654 |   24 | 1997-06-15 | m      | ganpati square chandrapur | ravi@gmail.com   | c001      |
+| s003      | ravi   | ashwin    | 9981239654 |   25 | 1996-06-15 | m      | raddison sq chandrapur    | ravi@gmail.com   | c001      |
+| s004      | sudha  | srivastav | 9987798754 |   24 | 1997-06-20 | f      | ganpati square chandrapur | sudha@gmail.com  | c003      |
+| s005      | radha  | srivastav | 9987798001 |   24 | 1997-01-20 | f      | ganpati square chandrapur | radha@gmail.com  | c003      |
+| s006      | rishi  | dhawan    | 9911798001 |   26 | 1995-01-20 | m      | jatpura gate chandrapur   | rishi@gmail.com  | c001      |
+| s008      | sakshi | ghate     | 9987123701 |   24 | 1997-03-28 | f      | vidya nagar chandrapur    | sakshi@gmail.com | c002      |
+| s009      | shilpa | sontake   | 9987623701 |   24 | 1997-07-08 | f      | vidya nagar chandrapur    | shilpa@gmail.com | c001      |
+| s011      | lalit  | yadav     | 9984449654 |   24 | 1997-10-12 | m      | ganpati square chandrapur | lalit@gmail.com  | c001      |
+| s016      | kavya  | patil     | 9984441154 |   23 | 1998-10-12 | f      | near ctps chandrapur      | kavya@gmail.com  | c002      |
+| s025      | sunil  | sao       | 9999623701 |   24 | 1997-07-19 | m      | old square chandrapur     | sunil@gmail.com  | c003      |
++-----------+--------+-----------+------------+------+------------+--------+---------------------------+------------------+-----------+
+
+delimiter /
+CREATE PROCEDURE copyALLfactdata()
+BEGIN
+DECLARE n INT DEFAULT 0;
+DECLARE i INT DEFAULT 0;
+SELECT COUNT(*) FROM faculty INTO n;
+SET i=0;
+WHILE i<n DO 
+insert into faculty(facultyid,facultyfname) select facultyid,facultyfname from faculty limit i,1;
+SET i = i + 1;
+END WHILE;
+End /
+
+Delimiter ;
+.................................
+Delimiter //
+
+Create procedure chkrpeat()
+Begin
+
+declare strng varchar(20);
+declare b int(10);
+set strng = '' ;
+set b = 1;
+Repeat 
+	set strng = concat(strng, b , ',');
+	set b = b+1;
+	until b = 6
+End repeat;
+Select strng;
+
+End //
+mysql> delimiter ;
+mysql> call chkrpeat;
++------------+
+| strng      |
++------------+
+| 1,2,3,4,5, |
++------------+
+
+delimiter /
+ CREATE PROCEDURE chklp()
+ BEGIN
+ DECLARE c  INT;
+ DECLARE strng  VARCHAR(200);
+        
+ SET c = 1;
+ SET strng =  '';
+
+ printnum:  LOOP
+IF  
+	c = 10 THEN 
+ 	LEAVE  printnum;
+ END  IF;
+ 
+SET c = c + 1;
+ IF  MOD(C,2)<>0 THEN
+ 	ITERATE  printnum;
+ ELSE
+        SET  strng = CONCAT(strng,c,',');
+ END  IF;
+         END LOOP;    
+          SELECT strng;
+ END /
+mysql> delimiter ;
+mysql> call chklp;
++-------------+
+| strng       |
++-------------+
+| 2,4,6,8,10, |
++-------------+
+
+
+delimiter /
+CREATE PROCEDURE chkdeptname()
+BEGIN
+DECLARE c  INT;
+DECLARE dptname varchar(40);
+DECLARE facultyfname  varchar(30);
+DECLARE strng  VARCHAR(200);
+        
+SET c = 0 ;
+SET strng =  '' ;
+SET dptname = '' ;
+SET facultyfname =  (select count(*) from faculty) ;
+printnum:  LOOP
+ IF  
+	c = facultyfname-1 THEN LEAVE  printnum;
+END  IF;
+        select deptname INTO dptname from faculty limit c,1; 	
+        SET  strng = CONCAT(strng,dptname,'||');
+        SET c = c + 1;
+ 
+         END LOOP;    
+          SELECT strng;
+ END /
+mysql> delimiter ;
+mysql> call chkdeptname;
++-------------------------------------------------------------------------------------------+
+| strng                                                                                     |
++-------------------------------------------------------------------------------------------+
+| it||science||lab||maths||economics||physics||lab||biology||biology||maths||home science|| |
++-------------------------------------------------------------------------------------------+
+
+mysql> set @anyname='lokesh';
+
+ delimiter /
+ create procedure wishes(INOUT anyname varchar(100))
+     begin
+     set anyname=concat("hello!",@anyname,",how are you doing?");
+     end /
+delimiter /
+call wishes(@anyname);
+
+
+Delimiter $$ 
+CREATE PROCEDURE getstdlist (INOUT stdlist varchar(1000))
+BEGIN
+DECLARE cmplt INTEGER default 0; 
+DECLARE sname varchar(100) default "" ; 
+DECLARE sfname_cursor CURSOR FOR  SELECT sfname FROM students;
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET cmplt = 1;
+
+OPEN sfname_cursor;
+	get_sfname: LOOP
+	FETCH sfname_cursor INTO sname;
+	IF 
+		cmplt = 1 THEN LEAVE get_sfname;
+	END IF;
+	 SET stdlist = CONCAT(stdlist,"|",sname);
+
+END LOOP get_sfname;
+CLOSE sfname_cursor;
+
+END $$
+DELIMITER ;
+mysql> delimiter ;
+mysql> set @stdlist='';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> call getstdlist(@stdlist);
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> select @stdlist;
++--------------------------------------------------------------------+
+| @stdlist                                                           |
++--------------------------------------------------------------------+
+| |mohan|ravi|ravi|sudha|radha|rishi|sakshi|shilpa|lalit|kavya|sunil |
++--------------------------------------------------------------------+
+
+............................................date-24/05/22.........................................
+.......................................day-09.......................................................
+
+
+triggers.................
+create table v
+ 	 (
+   	  validnumber int(10));
+
+delimiter /
+mysql> create trigger checknum BEFORE INSERT on v
+    -> for each row
+    -> BEGIN
+    -> IF NEW.validnumber<0 THEN SET NEW.validnumber=0;
+    -> ELSEIF NEW.validnumber >100 THEN SET NEW.validnumber=100;
+    -> end if;
+    -> end/
+delimiter ;
+
+insert into v values (-5);
+insert into v values (55);
+mysql> insert into v values (125);
+mysql> insert into v values (12);
+mysql> select * from v;
++-------------+
+| validnumber |
++-------------+
+|           0 |
+|          55 |
+|         100 |
+|          12 |
++-------------+
+ 
+
+create table dept_backup
+    -> (
+    -> departmentid varchar(10),
+    -> hod_fname varchar(20),
+    -> updatedate timestamp
+    -> );
+Query OK, 0 rows affected (0.05 sec)
+
+mysql> delimiter /
+mysql> create trigger deptbackup BEFORE UPDATE on department
+    -> for each row
+    -> begin
+    -> insert into dept_backup set departmentid=OLD.departmentid,hod_fname=OLD.hod_fname,
+    -> updatedate=current_timestamp;
+    -> end /
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> delimiter ;
+mysql> update department set hod_fname='ram' where departmentid='d001';
+mysql> select * from department;
++--------------+-----------------+--------------+-----------+------------+
+| departmentId | department_name | hod_fname    | hod_lname | doj        |
++--------------+-----------------+--------------+-----------+------------+
+| d001         | maths           | ram          |  potdukhe | 2011-05-01 |
+| d002         | it              | shiva        |  sridhan  | 2012-04-11 |
+| d011         | science         | savita       |  thakur   | 2011-05-01 |
+| d014         | biology         | vijay        | kumar     | 2010-06-01 |
+| d021         | physics         | harshwardhan | deshmukh  | 2011-05-01 |
+| d034         | economics       | sudhir       | pande     | 2018-06-01 |
+| d101         | lab             | sunny        | iyer      | 2011-05-01 |
++--------------+-----------------+--------------+-----------+------------+
+
+mysql> delimiter /
+mysql> create procedure check_yrr(IN yrr int(10))
+    -> begin
+    -> if yrr<1900 then SIGNAL SQLSTATE '45000'
+    -> SET MESSAGE_TEXT='sorry...year can not be less than 1900';
+    -> end if;
+    -> if yrr>2022 then
+    -> SIGNAL SQLSTATE '45001'
+    -> SET MESSAGE_TEXT='sorry...year cannot be future year';
+    -> end if;
+    -> end /
+Query OK, 0 rows affected, 1 warning (0.02 sec)
+
+mysql> delimiter ;
+mysql> delimiter /
+mysql> create trigger chkbeforedeptupdate BEFORE UPDATE on department
+    -> for each row
+    -> begin
+    -> call check_yrr(year(new.doj));
+    -> end /
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> create trigger chkbeforedeptinsert BEFORE INSERT on department
+    -> for each row
+    -> begin
+    -> call check_yrr(year(new.doj));
+    -> end /
+delimiter ;
+mysql> update department set doj='2023-05-05' where departmentid='d001';
+ERROR 1644 (45001): sorry...year cannot be future year
+mysql> update department set doj='1883-05-05' where departmentid='d001';
+ERROR 1644 (45000): sorry...year can not be less than 1900
+
+
+
+create table product (pid varchar(10), pname varchar(20), pstock int(20));
+create table orders(orderid varchar(10), pid varchar(10) , pqnty int(20));
+---------------------------------------------------------------------------------------------------------
+Delimiter /
+
+create trigger stockupdate  AFTER INSERT ON orders
+FOR EACH ROW
+Begin
+declare currentstock int(20);
+
+select pstock into currentstock from product where new.pid = product.pid;
+
+If currentstock < new.pqnty then
+Signal sqlstate '45000'
+SET MESSAGE_TEXT = 'Sorry, order can not be placed';
+else
+Update product set pstock = pstock-NEW.pqnty where new.pid = product.pid;
+end if;
+End /
+
+Delimiter ;
+
+delimiter /
+     create trigger backup_product AFTER INSERT on product
+     for each row
+     begin
+     insert into backup_product values (new.pid,new.pname);
+     end /
+delimiter ;
+mysql> insert into backup_product values ('pid001','pendrive');
+mysql> select * from backup_product;
++--------+----------+
+| bpid   | bpname   |
++--------+----------+
+| pid001 | pendrive |
++--------+----------+
+
+
+mysql> select trigger_name,EVENT_OBJECT_TABLE from information_schema.triggers where
+    -> information_schema.triggers.trigger_schema like '%cms%' and EVENT_OBJECT_TABLE = 'department';
++---------------------+--------------------+
+| TRIGGER_NAME        | EVENT_OBJECT_TABLE |
++---------------------+--------------------+
+| deptbackup          | department         |
+| chkbeforedeptupdate | department         |
+| chkbeforedeptinsert | department         |
++---------------------+--------------------+
+
+mysql> delimiter /
+mysql> create procedure chkid(in proid varchar(10),proname varchar(40))
+    -> begin
+    -> declare exit handler for 1062
+    -> begin
+    -> select concat(proid,"id is already in table") as message;
+    -> end;
+    -> declare exit handler for 1146
+    -> select 'table in which you are trying to enter the value is missing.please create table first'message;
+    -> insert into prodeuct values(proid,proname);
+    -> end /
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> delimiter ;
+
+mysql> insert into prodeuct values ('p001','keyboard');
+Query OK, 1 row affected (0.02 sec)
+mysql> call chkid('p001','mouse');
++----------------------------+
+| message                    |
++----------------------------+
+| p001id is already in table |
++----------------------------+
+
+
+
+
+

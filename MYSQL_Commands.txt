@@ -1,0 +1,973 @@
+Rack		
+		
+RackId	varchar(10)PK
+RackCapacity	int(10)	
+
+
+CREATE TABLE Rack
+(
+	rackid varchar(10) NOT NULL,
+	rackcapacity int(15) NOT NULL,
+	PRIMARY KEY(rackid)
+)
+Member		
+MemberId	varchar(10)	PK
+mFname	varchar(20)	
+mLname	varchar(20)	
+PlanId	varchar(10)	FK
+DOJ	date	
+Gender	enum('M','F')	
+Status	enum('A','NA','V')	
+
+create table member
+(
+	memberid varchar(10) NOT NULL,
+	mfname varchar(20) NOT NULL,
+	mlname varchar(20) NOT NULL,
+	planid varchar(10),
+	doj date,
+	gender enum('M', 'F'),
+	status enum('A','NA', 'V'),
+	mobilenumber varchar(10), 
+	UNIQUE(mobilenumber),
+	primary key(memberid),
+	Foreign Key(planid) REFERENCES plan(planid) ON DELETE CASCADE	
+)
+	
+Plan		
+PlanId	varchar(10)	PK
+Duration	int(10)	
+Fee	int(10)	
+MaxBooks	int(10)	
+
+create table plans
+(
+	planid varchar(10) NOT NULL,
+	duration int(10),
+	fee int(10),
+	maxbooks int(10),
+	CHECK (maxbooks >=1 AND maxbooks <=3),
+	primary key(planid)
+)
+
+
+DDL - Data Definition Language - CAN NOT BE ROLLED BACK
+CREATE TABLE - creating the table
+DROP TABLE - will drop table with data and structure as well
+TRUNCATE - will delete the data and structure will be retained
+
+DML - Data manipulation lanaguage - CAN ROLLED BACK (only if one is working in manual commit mode)
+INSERT - will insert new values in existing table
+UPDATE - will update the specific field/row or all the rows
+DELETE - will delete the specific field/row or all the rows
+
+DCL
+
+COMMIT - to confirm the changes
+ROLLBACK - to rever the changes done using ONLY DML commands
+
+Constraints
+PRIMARY KEY - UNIQUE + NOT NULL
+FOREIGN KEY - Primary Key in Master table refereed in child table
+ENUM - Will restrict the set of values specified while creating table
+NOT NULL - field will not accept NULL values
+CHECK  - it will ristrict the inserted values within the given condition
+UNIQUE - it will accept only UNIQUE value in a field specified (other than primary key),
+	unlike primary key , it accepts NULL values
+
+
+FOREIGN KEY ON DELETE NULL - when the primary key values from master table will be deleted then , in child/slave/referred table NULL will be inserted at the place of those foreign key values
+
+FOREIGN KEY ON DELETE CASCADE -  when the primary key values from master table will be deleted then , in child/slave/referred table, the rows referring those values(from master table) will also get deleted .
+
+day-4...............................
+1) To make any changes/modifications in data --> Update
+2) To make any structural changes in table --> ALTER
+
+Use of Alter Command
+-------------------------------
+1) Adding constraint
+
+ ALTER TABLE book ADD CONSTRAINT fk_rackid FOREIGN KEY(rackid) REFERENCES Rack(rackid);
+ ALTER TABLE racks ADD PRIMARY KEY(rackid);
+
+2) Dropping Constraint
+
+Alter table racks drop primary key;
+
+3) Modify the datatype
+
+ ALTER TABLE racks modify rackcap varchar(20);
+ALTER TABLE racks modify rackcap int(10);
+
+4) Adding column
+ALTER TABLE racks ADD COLUMN rackmaterial varchar(10);
+
+4A) Adding column after any specific column
+ALTER TABLE racks ADD COLUMN racktyp varchar(10) AFTER rackid;
+
+5) Dropping the column
+ALTER TABLE racks DROP COLUMN racktyp;
+
+6) Rename the table
+ALTER TABLE racks rename to multirack;
+
+7) Chaning the field name
+ALTER TABLE multirack CHANGE rackcap rackCapacity int(20);
+
+
+dropping foreign key
+---------------------------
+ALTER TABLE <table_name> DROP FOREIGN KEY <constraint_name>
+ALTER TABLE <table_name> DROP INDEX  field name <-usually this is same as  field name
+
+ALTER TABLE book DROP FOREIGN KEY fk_rackid; <---
+ALTER TABLE book DROP INDEX fk_rackid;
+
+To check the constraint name....
+SELECT * FROM   information_schema.table_constraints WHERE  table_schema = schema() AND table_name = '  '
+
+----------------------------------------------------------------------------------------------------------------------------
+
+Selecting or Retriving data from tables
+
+1) Select all the data
+select * from rack;  
+* --> All the column
+
+2) selecting few columns
+
+select bookname, cost , noofpages from book;
+
+3) Selecting columns with friendly name
+select bookname as 'Book Name', cost as Price, noofpages as 'Number Of Pages' from book;
+
+4) Selecting few rows (use of where clause)
+USE OF WHERE
+
+select * from member WHERE Sex = 'Male';
+select * from member WHERE status = 'Active';
+select memberid, status from member WHERE status = 'Active';
+
+5) Use of OR and AND cluase
+
+Select * from member WHERE status = 'Active' AND sex = 'Male';
+Select * from member WHERE status = 'Active' OR sex = 'Male';
+
+6) use of IN and NOT IN clause
+
+select * from book where catogery IN ('Fiction' , 'Non-Fiction', 'Mystery');
+select * from book where catogery NOT IN ('Fiction' , 'Non-Fiction', 'Mystery');
+
+7) use of BETWEEN 
+
+select * from book where COST > 200 AND COST <400 ;
+select * from book where COST BETWEEN 200 AND 400 ; Note: both 200 and 400 are inclusive
+
+8) use of DISTINCT
+select distict(catogery) from book;
+
+9) single value functions
+
+count
+avg
+min
+max
+sum
+round
+
+
+select avg(cost) from book where catogery = 'fiction';
+
+10)  IS NULL  .... IS NOT NULL
+
+select * from book where noofpage IS NULL;
+select * from book where noofpage IS NOT NULL;
+
+11) sorting the data ASC, DESC
+
+BY default on primary key
+default order is always ASC
+
+FOR sorting on different field
+
+SELECT * FROM AUTHOR ORDER BY AUTHORNAME; < - asc
+SELECT * FROM AUTHOR ORDER BY AUTHORNAME DESC; < - dsc
+
+12) Use of wild cards % _ , use of 'like' and 'not like'
+
+select * from author where authorname LIKE 'a%'; --> starting with a
+select * from author where authorname LIKE '%a'; --> ending with a
+select * from author where authorname LIKE '%mu%'; --> contains 'mu' letter
+select * from author where authorname LIKE '_u%'; --> second positon u
+select * from author where authorname NOT LIKE '__v%'; second positon is NOT v
+
+13) Use of limit command
+
+select * from book order by cost desc limit 5; - top 5 costliest 5 book
+select * from book limit 0 , 3; --> will start from first record and show 3 records
+
+14) group by
+
+select catogery , count(catogery) from book group by catogery;
+--> grouping on the basis of catogery and counting
+
+select gender , count(gender) from author group by gender;
+select catogery , avg(cost) from book group by catogery;
+
+select catogery , avg(cost) from book group by catogery HAVING avg(cost) > 200;
+--> HAVING keyword is used to specify the condition during use of group by cluase
+--------------------------------------------------------------------------------------------
+SAVE POINT while rolling back
+
+set AUTOCOMMIT = 0;
+
+savepoint one;
+insert into author values ('A011','Vikram Seth','India','Male');
+
+savepoint two;
+update author set Nationality = 'UK' where authorid = 'A011';
+
+savepoint three;
+update author set authorname = 'Mukul S Deva' where authorid = 'A011';
+
+rollback to one;
+rollback to two;
+rollback to three;
+
+day-5......................
+renaming the database
+
+mysqldump -u root -p -v lib >lib.sql
+mysqladmin -u root -p create library
+mysql -u root -p library < lib.sql
+
+1) Join - used for joining multiple table
+
+1) Inner Join
+select efname ,elname , deptname from employee e inner  join department d on e.deptid=d.deptid
+
+2) left  join
+select efname ,elname , deptname from employee e LEFT join department d on e.deptid=d.deptid;
+
+3) right join
+select efname ,elname , deptname from employee e RIGHT join department d on e.deptid=d.deptid;
+
+4) Cross Join - Cartesian products
+select efname ,elname , deptname from employee e  join department d
+
+subqueries
+
+select bookname from book where authorid = (select authorid from author where nationality = 'israel');
+
+select bookname from book where authorid = (select authorid from author where nationality = 'israel');
+
+select bookname from book where authorid IN (select authorid from author where nationality = 'UK');
+IN --> since inner query returns more than ONE row
+
+select bookname from book where authorid NOT IN (select authorid from author where nationality = 'UK' ); 
+
+select authorname from author where authorid = (select authorid from book where cost = (select max(cost) from book));
+
+select bookname, cost, authorname from book JOIN author on book.authorid = author.authorid 
+AND NOT EXISTS (select bookstatus from book where bookstatus = 'A');
+
+mysql> select bookname, cost, authorname from book JOIN author on book.authorid = author.authorid 
+AND EXISTS (select bookstatus from book where bookstatus = 'A');
+
+UNION
+
+select mfname from member UNION select mfname from newmember;
+
+select mfname from member UNION ALL select mfname from newmember;
+
+select mfname from member INTERSECT select mfname from newmember;
+XX does not work in mysql
+
+effect of INTERSECT
+select mfname from member where mfname IN (select mfname from newmember);
+
+DATA OTHER THAN COMMON
+select mfname from newmember where mfname NOT IN (select mfname from member);
+
+ALL about users
+----------------------
+6) To Create new user
+create user trial@localhost identified by 'new';
+
+7) To drop the existing user
+drop user <user_name>@<server_name>
+
+To list all the users
+SELECT User FROM mysql.user
+------------------------------------
+To list of all users having access to database
+SELECT user FROM mysql.db WHERE Db = 'classroom';
+---------------------------------------------
+Creating the user
+CREATE USER aa@localhost IDENTIFIED BY 'bb';
+----------------------------------------------
+Dropping the user
+Drop USER aa@localhost
+----------------------------------------------
+Providing the grants to user aa
+
+GRANT ALL ON classicmodels.* TO aa;
+GRANT SELECT ON lms.* TO aa;
+-----------------------------------------------------
+Revoking the grants from user aa
+revoke ALL on classicmodels.* from aa@localhost;
+----------------------------------------------------
+show grants;
+show grants for current_user;
+
+day-6........................
+
+Views
+
+Command to list the views
+--> show full tables;
+
+Simple View -- Updatable View
+
+CREATE VIEW fbook as select bookid, bookname , catogery from book where catogery = 'Fiction';
+create view smallbook as select * from book where catogery = 'Fiction';
+
+Complex View - Non Updatable View
+create view bookinfo as select bookname, cost , authorname , Nationality from book b LEFT JOIN author a ON b.authorid = a.authorid;
+
+Creating Temporary Table
+create TEMPORARY table smember as select memberid , mfname, mlname , status from lms.member;
+
+Dropping Temporary Table 
+1) Automatic - Once the user logs out
+2) Manual - Drop Temporary table smember;
+
+Index
+
+To see indexes on the table
+show indexes FROM book;
+
+Creating index
+CREATE INDEX idx_cost ON book(cost);
+
+By default --> index - visible
+To create invisible index 
+CREATE INDEX idx_pages ON book(noofpages) INVISIBLE;
+
+To make the visible index invisible
+ALTER TABLE book ALTER INDEX Idx_cost INVISIBLE;
+
+Dropping index
+drop INDEX idx_cost from book;
+
+.................................day 07..............................
+In built funcitons....few examples....
+
+1) Curret_date()
+
+select current_date();
++----------------+
+| current_date() |
++----------------+
+| 2022-05-19     |
++----------------+
+
+2)  select user();
++----------------+
+| user()         |
++----------------+
+| root@localhost |
++----------------+
+
+3) select truncate(723.1743,1);
++----------------------+
+| truncate(723.1743,1) |
++----------------------+
+|                723.1 |
++----------------------+
+
+--> Truncating upto 1 digit after decimal point
+
+4) select ucase('ajarbaizan');
++---------------------+
+| ucase('ajarbaizan') |
++---------------------+
+| AJARBAIZAN          |
++---------------------+
+1 row in set (0.00 sec)
+
+
+
+To list the already avaliable user defined functions in database
+----------------------------------------------------------------
+SELECT ROUTINE_NAME,ROUTINE_TYPE FROM INFORMATION_SCHEMA.ROUTINES where ROUTINE_TYPE = 'FUNCTION' AND ROUTINE_SCHEMA = 'tklms';
+
+SET GLOBAL log_bin_trust_function_creators = 1;
+
+---------------------------------------------------------------------------------------------------------------------------------
+Functions with SINGLE input paramerts
+--------------------------------------------------------------------------------------------------------------------------------
+Delimiter /
+create function getmembername(mid varchar(20)) returns varchar(10)
+Begin
+declare mname varchar(10);
+select mfname  from member where memberid = mid INTO mname;
+return(mname);
+End /
+Delimiter ;
+
+Call for single value
+set @mname = (select getmembername('M001'));
+select @mname;
+
+Call within select query
+select memberid, gemembername(memberid) from member;
+=======================================================================
+Delimiter /
+
+Create function country(CountCountry varchar(20))
+Returns int
+
+Begin
+Return(Select count(countryid) from author where nationality=CountCountry);
+end /
+
+Delimiter ;
+
+Select country('USA');
+========================================================================
+Delimiter /
+
+create function DesignationWiseCount(dsgn varchar(10))
+Returns int
+Begin
+
+Return(select count(employeeid) from employee where designation= dsgn);
+
+End /
+Delimiter ;
+
+Select DesignationWiseCount('Accountant');
+
+======================================================================
+Functions  WITH MULTIPLE input parameters
+======================================================================
+Delimiter /
+
+Create function getmember (yr int(10) , gender varchar(10))
+returns int
+
+Begin
+Return(select count(*) from member where year(doj) = yr and sex=gender);
+End /
+
+Delimiter ;
+
+Select getmember(2022,'Male)
+======================================================================
+Delimiter /
+
+Create function CountryWiseAuthor(acountry varchar(20))
+returns int
+
+Begin
+
+Return (select count(*) from author where nationality = acountry);
+
+End /
+
+Delimiter ;
+
+Select 'Number of Authors from UK are' ,  CountryWiseAuthor('UK');
+
+
+.............................day 08.......date-23/05/22..............................
+Delimiter /
+create function checkmemberage(yr int(10)) returns varchar(60)
+Begin
+declare membertype varchar(60);
+	IF(yr =2022) THEN SET membertype = 'Latest Member';
+		ELSEIF(yr = 2021) THEN SET membertype = 'Last year Member';
+		ELSEIF(yr <2021) THEN SET membertype = 'Old Member';
+	END IF;
+Return(membertype);
+End /
+Delimiter ;
+----------------------------------------------------------------------
+PROCEDURES
+-----------------------------------------------------------------------
+Delimiter //
+CREATE PROCEDURE getAllbooks(IN bkid varchar(10),OUT bkname varchar(30))
+BEGIN
+	Select bookname INTO bkname from book where bookid = bkid;
+END //
+Delimiter ;
+-------------------------------------------------------------------------
+Using FUNCTION within procedure
+------------------------------------------------------------------------
+Delimiter //
+Create procedure checkmember(IN mid varchar(10), OUT mbrtype varchar(60))
+BEGIN
+	declare yr int(10);
+	SELECT year(doj) from member where 	memberid = mid INTO yr;
+	Select checkmemberage(yr) INTO mbrtype;
+END //
+Delimiter ;
+--------------------------------------------------------------------------------------------------------------
+
+Delimiter //
+Create procedure checkmemberCase(IN mid varchar(10), OUT mbrtype varchar(60))
+Begin
+
+declare yr int(10);
+Select year(doj) from member where memberid = mid INTO yr;
+CASE
+	WHEN yr = 2022 THEN SET mbrtype = 'Latest Member';	
+	WHEN yr = 2021 THEN SET mbrtype = 'Last Year Member';
+	WHEN yr < 2021 THEN SET mbrtype = 'Old Member';	
+END CASE;
+End //
+
+Delimiter ;
+-------------------------------------------------------------------------------------------------------------------------------------
+While		Repeat			LOOP			CURSOR
+-------------------------------------------------------------------------------------------------------------------------------------
+Delimiter /
+Create procedure chkwhile()
+Begin
+declare a int;
+declare strng varchar(200);
+set a = 1;
+set strng = '';
+	While (a <= 10) do
+		set strng = concat(strng , a, ',');  
+		set a = a+1;
+	End While;
+Select strng;
+End /
+Delimiter ;
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Delimiter $
+create procedure displayAlldata()
+Begin
+declare n INT default 0;
+declare i INT default 0;
+set i = 0;
+
+	select count(*) from member INTO n;
+	
+	while (i<n) DO
+		select * from member limit i, 1;
+		set i = i+1;
+	End While;
+END $
+Delimiter ;
+-----------------------------------
+Delimiter //
+Create procedure chkRPTtable()
+BEGIN
+	declare b int(10);
+	set b = 0;
+	Repeat
+		update allmembers set emailid = concat(mfname , '@gacademy.in');
+		set b = b+1;
+		until b = 10
+	End Repeat;
+End //
+Delimiter ;
+----------------------------------------------------------------------------------------------------------------
+Looping Structures
+
+1) While Do
+
+Delimiter /
+Create procedure chkwhile()
+Begin
+Declare a int;
+Declare strng varchar(20);
+set a = 1;  
+set strng = '';
+While (a <=5) do
+	set strng = concat(strng,a,',');
+	set a = a+1;
+End While;
+Select strng;
+End /
+
+Delimiter ; 
+
+Call chkwhile;
+========================================================================
+Procedure using while loop for copying data from 'member' table to 'allmembers' table
+==========================================================================
+
+delimiter /
+CREATE PROCEDURE copyALLdata()
+BEGIN
+DECLARE n INT DEFAULT 0;
+DECLARE i INT DEFAULT 0;
+SELECT COUNT(*) FROM member INTO n;
+SET i=0;
+WHILE i<n DO 
+insert into allmembers(memberid,mfname) select memberid,mfname from member limit i,1;
+SET i = i + 1;
+END WHILE;
+End /
+
+Delimiter ;
+
+call copyALLdata;
+
+2) Repeat
+
+Delimiter //
+
+Create procedure chkrpt()
+Begin
+
+declare strng varchar(20);
+declare b int(10);
+set strng = '' ;
+set b = 1;
+Repeat 
+	set strng = concat(strng, b , ',');
+	set b = b+1;
+	until b = 6
+End repeat;
+Select strng;
+
+End //
+
+Delimiter ;
+
+Call chkrpt;
+==========================================================================
+Procedure using REPEAT for  inserting data in a filed in allmembers table
+=========================================================================
+Delimiter //
+Create procedure chkRptInTable()
+Begin
+declare strng varchar(20);
+declare b int(10);
+set strng = '' ;
+set b = 0;
+Repeat 
+	update allmembers set emailid = '' where emailid is NULL;
+	update allmembers set emailid = concat(mfname, '@gacademy.in');
+	set b = b+1;
+	until b = 6
+End repeat;
+End //
+Delimiter ;
+
+CALL chkRptInTable;
+Select * from allmembers;
+
+3) Loop strcture
+
+ delimiter /
+ CREATE PROCEDURE chklp()
+ BEGIN
+ DECLARE c  INT;
+ DECLARE strng  VARCHAR(200);
+        
+ SET c = 1;
+ SET strng =  '';
+
+ printnum:  LOOP
+IF  
+	c = 10 THEN 
+ 	LEAVE  printnum;
+ END  IF;
+ 
+SET c = c + 1;
+ IF  MOD(C,2)<>0 THEN
+ 	ITERATE  printnum;
+ ELSE
+        SET  strng = CONCAT(strng,c,',');
+ END  IF;
+         END LOOP;    
+          SELECT strng;
+ END /
+
+Delimiter ;	
+
+CALL chklp;
+==========================================================================
+Procedure using LOOP for  extracting book name and connecting them continuous string
+=========================================================================
+delimiter /
+CREATE PROCEDURE chkbkname()
+BEGIN
+DECLARE c  INT;
+DECLARE bkname varchar(40);
+DECLARE totalrecords  INT;
+DECLARE strng  VARCHAR(200);
+        
+SET c = 0 ;
+SET strng =  '' ;
+SET bkname = '' ;
+SET totalrecords =  (select count(*) from book) ;
+printnum:  LOOP
+ IF  
+	c = totalrecords-1 THEN LEAVE  printnum;
+END  IF;
+        select bookname INTO bkname from book limit c,1; 	
+        SET  strng = CONCAT(strng,bkname,'||');
+        SET c = c + 1;
+ 
+         END LOOP;    
+          SELECT strng;
+ END /
+
+Delimiter ;	
+--------------------------------------------------------------------------------------------------------------------------------
+Use of same variable as INOUT variable
+---------------------------------------------------------------------------------------------------------------
+set @greet = 'Amit ';
+
+Delimiter ;
+
+delimiter //
+create procedure wishes (INOUT greet varchar(100))
+begin
+set greet = concat("Hello " , @greet, ", How are you doing?");
+end //
+
+call wishes(@greet);
+Select @greet;
+---------------------------------------------------------------------------------------------------------------------------------
+
+4) Cursor
+
+Delimiter $$ 
+CREATE PROCEDURE getbooklist (INOUT booklist varchar(1000))
+BEGIN
+DECLARE cmplt INTEGER default 0; 
+DECLARE bname varchar(100) default "" ; 
+DECLARE bookname_cursor CURSOR FOR  SELECT bookname FROM book;
+
+DECLARE CONTINUE HANDLER FOR NOT FOUND SET cmplt = 1;
+
+OPEN bookname_cursor;
+	get_bookname: LOOP
+	FETCH bookname_cursor INTO bname;
+	IF 
+		cmplt = 1 THEN LEAVE get_bookname;
+	END IF;
+	 SET booklist = CONCAT(booklist,"|",bname);
+
+END LOOP get_bookname;
+CLOSE bookname_cursor;
+
+END $$
+DELIMITER ;
+
+set @booklist = '';
+Call getbooklist(@booklist);
+Select @booklist;
+
+
+Handler possible status -->
+
+FOUND- If the record is fetched successfully by the recent operation then, it returns ‘TRUE’ otherwise ‘FALSE’.
+
+NOTFOUND- It returns ‘FALSE’ if the record is retrieved but ‘TRUE’ if not.
+
+ISOPEN-If the cursor is already opened, it results in ‘TRUE’ else ‘FALSE’
+
+ROWCOUNT-When DML operations are executed, in a result set it provides the count of rows.
+
+
+...................................date-24/05/22.......................................
+...................................day-09.................................................
+Triggers
+-------------------------------------------------------------------------
+BEFORE INSERT
+BEFORE UPDATE
+BEFORE DELETE
+
+AFTER INSERT
+AFTER UPDATE
+AFTER DELETE
+-----------------------------------------------------------------------
+To see all the triggers on a table
+-------------------------------------------
+select trigger_name,EVENT_OBJECT_TABLE from information_schema.triggers where 
+information_schema.triggers.trigger_schema like '%tklms%' and EVENT_OBJECT_TABLE = 'book ';
+
+checking the value only 0 to 100 
+
+BEFORE 
+=======
+
+create table V(validnumber int(10));
+
+Delimiter /
+
+create trigger checkNum before insert on v
+For Each Row
+Begin
+	if new.validnumber < 0 THEN SET  NEW.validnumber = 0;
+	elseif new.validnumber > 100 then set new.validnumber = 100;
+end if;
+
+End /
+
+Delimiter ;
+
+insert into v values (-5);
+
+==========================================================================
+create table emp_backup 
+(
+	empid varchar(10),
+	empname varchar(20),
+	updateDate timestamp
+);
+
+Delimiter //
+
+create trigger empbackup before update  on EMPLOYEE
+For Each Row
+Begin
+
+insert into emp_backup set empid=OLD.EmployeeId, empname = OLD.EfName,
+updateDate = current_timestamp;
+end //
+
+Delimiter ;
+
+update employee set efname = 'Ram' where employeeid = 'E001';
+
+=================================================================
+
+DELIMITER $$
+CREATE PROCEDURE `check_yrr`(IN yrr int(10))
+BEGIN
+    IF yrr < 1900 THEN
+        SIGNAL SQLSTATE '45000'
+         SET MESSAGE_TEXT = 'Sorry....year can not be less than 1900';
+    END IF;
+    IF yrr > 2022 THEN
+ SIGNAL SQLSTATE '45001'
+ SET MESSAGE_TEXT = 'Sorry....year cannot be future year';
+    END IF;
+ 
+END $$
+Delimiter ;
+
+Delimiter /
+create trigger chkBeforeMemberUpdate before update on member 
+For Each Row
+
+Begin
+	call check_yrr(year(new.doj));
+End /
+Delimiter ;
+
+
+Delimiter /
+create trigger chkBeforeMemberInsert before insert on member 
+For Each Row
+
+Begin
+	call check_yrr(year(new.doj));
+End /
+Delimiter ;
+==========================================================================
+
+After
+=====
+Delimiter /
+
+Create trigger memberbackup after insert on member
+For Each Row
+Begin
+
+insert into allmembers values (new.memberid, new.MemberName);
+
+End /
+
+Delimiter ;
+------------------------------------------------------------------------------------------------------------------------
+Stock Updation Trigger
+
+
+create table product (pid varchar(10), pname varchar(20), pstock int(20));
+create table orders(orderid varchar(10), pid varchar(10) , pqnty int(20));
+---------------------------------------------------------------------------------------------------------
+Delimiter /
+
+create trigger stockupdate  AFTER INSERT ON orders
+FOR EACH ROW
+Begin
+declare currentstock int(20);
+
+select pstock into currentstock from product where new.pid = product.pid;
+
+If currentstock < new.pqnty then
+Signal sqlstate '45000'
+SET MESSAGE_TEXT = 'Sorry, order can not be placed';
+elseif
+Update product set pstock = pstock - NEW.pqnty where new.pid = product.pid;
+
+End /
+
+Delimiter ;
+-------------------------------------------------------------------------
+Exception Handline
+--------------------------------------------------------------------------
+
+DECLARE HANDLER STATEMENT
+
+DECLARE action HANDLER FOR condition_value statement
+action
+
+- CONTINUE --> put the code between Begin & End
+- EXIT
+
+conditon_value	
+		
+	- MySQL Error Code
+	- SQLSTATE
+	- SQLWARNING
+	- NOTFOUND
+	- SQLEXCEPTION
+
+statement
+simple or compound statement --> Use Begin & End
+
+create table product
+(
+	pid varchar(10) NOT NULL,
+	pname varchar(20),
+	primary key(pid)
+);
+delimiter /
+
+Delimiter /
+create procedure chkid(in proid varchar(10),proname varchar(40))
+
+  Begin
+    DECLARE EXIT HANDLER FOR 1062
+    BEGIN
+ 	SELECT CONCAT(proid , "  id is already in table") AS message;
+     END;
+
+	DECLARE EXIT HANDLER FOR 1146 
+SELECT 'Table in which you are trying to enter the value is missing.	Please create table  first' Message; 
+
+	INSERT INTO product  VALUES(proid,proname);
+End /
+Delimiter ;
+
+
+-- exit if the duplicate key occurs
+    DECLARE EXIT HANDLER FOR 1062 SELECT 'Duplicate keys error encountered' Message; 
+    
+DECLARE EXIT HANDLER FOR SQLEXCEPTION SELECT 'SQLException encountered' Message; 
+
+DECLARE EXIT HANDLER FOR SQLSTATE '23000' SELECT 'SQLSTATE 23000' ErrorCode;
+-----------------------------------------------------------------
